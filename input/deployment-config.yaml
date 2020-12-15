@@ -1,0 +1,79 @@
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
+metadata:
+  annotations:
+    openshift.io/generated-by: Venkata Nidumukkala
+  # labels:
+  #   app: 'testing-app-dc'
+  name: 'testing-app-dc'
+  namespace: testing-app-dev
+spec:
+  replicas: 1
+  revisionHistoryLimit: 5
+  selector:
+    app: 'testing-app-dc'
+    deploymentconfig: 'testing-app-dc'
+  strategy:
+    activeDeadlineSeconds: 21600
+    resources: {}
+    rollingParams:
+      intervalSeconds: 1
+      maxSurge: 25%
+      maxUnavailable: 25%
+      timeoutSeconds: 600
+      updatePeriodSeconds: 1
+    type: Rolling
+  template:
+    metadata:
+      annotations:
+        openshift.io/generated-by: Venkata Nidumukkala
+      # labels:
+      #   app: 'testing-app-dc'
+      #   deploymentconfig: 'testing-app-dc'
+    spec:
+      containers:
+        - env:
+            - name: TZ
+              value: Asia/Dubai
+            - name: SPRING_PROFILES_ACTIVE
+              value: sit
+          image: >-
+            
+          imagePullPolicy: IfNotPresent          
+          name: testing-app
+          ports:
+            - containerPort: 8443
+              protocol: TCP
+            - containerPort: 8778
+              protocol: TCP
+            - containerPort: 8080
+              protocol: TCP
+          resources:
+            limits:
+              cpu: 700m
+              memory: 1250Mi
+            requests:
+              cpu: 250m
+              memory: 550Mi
+          terminationMessagePath: /logs/termination-log
+          terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      nodeSelector: 
+        role: app
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+  test: false
+  triggers:
+    - imageChangeParams:
+        containerNames:
+          - testing-app
+        from:
+          kind: ImageStreamTag
+          name: 'testing-app-nexus:dev'
+          namespace: testing-app-dev
+        pullSecret:
+          name: 'nexus-repository'
+      type: ImageChange
+    - type: ConfigChange

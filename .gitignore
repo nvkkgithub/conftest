@@ -1,0 +1,19 @@
+#  Local .terraform directories
+**/.terraform/*
+
+# .tfstate files
+*.tfstate
+*.tfstate.*
+
+# .tfvars files
+*.tfvars
+*.bak
+
+# Local .vscode config files
+**/.vscode/*
+
+# MacOS
+.DS_Store
+
+# Local pycharm config files
+.idea
