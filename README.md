@@ -12,7 +12,7 @@ $ brew install conftest
 
 ## Usage
 ```
-$ conftest input/deployment-config.yml --policy policies/deployment.rego
+$ conftest test input/deployment-config.yml --policy policies/deployment.rego
 
 $ conftest test input/deployment-config.yaml --policy policies/deployment.rego -o table
 +---------+------------------------------+-----------+--------------------------------+
@@ -26,6 +26,20 @@ $ conftest test input/deployment-config.yaml --policy policies/deployment.rego -
 
 ```
 
+* Combine different options into 'input'
+
+```
+$ conftest test input/manifest-resources.yaml --policy policies/combine.rego --combine
+FAIL - Combined - main - Deployment hello-kubernetes has selector hello-kubernetes that does not match any Services
+
+1 test, 0 passed, 0 warnings, 1 failure, 0 exceptions
+```
+
+
+* Testing Dockerfile
+```
+$ conftest test input/Dockerfile --policy policies/docker -o table
+```
 
 
 
